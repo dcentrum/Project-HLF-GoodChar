@@ -1,0 +1,154 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.goodchar.com:
+    container_name: orderer.goodchar.com
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/goodchar.com/orderers/orderer.goodchar.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/goodchar.com/orderers/orderer.goodchar.com/tls/:/var/hyperledger/orderer/tls
+    - orderer.goodchar.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+  peer0.localngo1.goodchar.com:
+    container_name: peer0.localngo1.goodchar.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.localngo1.goodchar.com
+      - CORE_PEER_ADDRESS=peer0.localngo1.goodchar.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.localngo1.goodchar.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.localngo1.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=LocalNGO1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/localngo1.goodchar.com/peers/peer0.localngo1.goodchar.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/localngo1.goodchar.com/peers/peer0.localngo1.goodchar.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.localngo1.goodchar.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.localngo1.goodchar.com:
+    container_name: peer1.localngo1.goodchar.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.localngo1.goodchar.com
+      - CORE_PEER_ADDRESS=peer1.localngo1.goodchar.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.localngo1.goodchar.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.localngo1.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=LocalNGO1MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/localngo1.goodchar.com/peers/peer1.localngo1.goodchar.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/localngo1.goodchar.com/peers/peer1.localngo1.goodchar.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.localngo1.goodchar.com:/var/hyperledger/production
+
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer0.localngo2.goodchar.com:
+    container_name: peer0.localngo2.goodchar.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.localngo2.goodchar.com
+      - CORE_PEER_ADDRESS=peer0.localngo2.goodchar.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.localngo2.goodchar.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.localngo2.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=LocalNGO2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/localngo2.goodchar.com/peers/peer0.localngo2.goodchar.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/localngo2.goodchar.com/peers/peer0.localngo2.goodchar.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.localngo2.goodchar.com:/var/hyperledger/production
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  peer1.localngo2.goodchar.com:
+    container_name: peer1.localngo2.goodchar.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.localngo2.goodchar.com
+      - CORE_PEER_ADDRESS=peer1.localngo2.goodchar.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.localngo2.goodchar.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.localngo2.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=LocalNGO2MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/localngo2.goodchar.com/peers/peer1.localngo2.goodchar.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/localngo2.goodchar.com/peers/peer1.localngo2.goodchar.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.localngo2.goodchar.com:/var/hyperledger/production
+    ports:
+      - 10051:7051
+      - 10053:7053
+
+  peer0.gc.goodchar.com:
+    container_name: peer0.gc.goodchar.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.gc.goodchar.com
+      - CORE_PEER_ADDRESS=peer0.gc.goodchar.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.gc.goodchar.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.gc.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=gcMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/gc.goodchar.com/peers/peer0.gc.goodchar.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/gc.goodchar.com/peers/peer0.gc.goodchar.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.gc.goodchar.com:/var/hyperledger/production
+    ports:
+      - 11051:7051
+      - 11053:7053
+
+  peer1.gc.goodchar.com:
+    container_name: peer1.gc.goodchar.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.gc.goodchar.com
+      - CORE_PEER_ADDRESS=peer1.gc.goodchar.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.gc.goodchar.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.gc.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=gcMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/gc.goodchar.com/peers/peer1.gc.goodchar.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/gc.goodchar.com/peers/peer1.gc.goodchar.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.gc.goodchar.com:/var/hyperledger/production
+    ports:
+      - 12051:7051
+      - 12053:7053

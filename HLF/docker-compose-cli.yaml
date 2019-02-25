@@ -1,0 +1,170 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+volumes:
+  orderer.goodchar.com:
+  peer0.localngo1.goodchar.com:
+  peer1.localngo1.goodchar.com:
+  peer0.localngo2.goodchar.com:
+  peer1.localngo2.goodchar.com:
+  peer0.gc.goodchar.com:
+  peer1.gc.goodchar.com:
+  ca.localngo1.goodchar.com:
+  ca.localngo2.goodchar.com:
+  ca.gc.goodchar.com:
+
+networks:
+  gcnw:
+
+services:
+  
+  orderer.goodchar.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.goodchar.com
+    container_name: orderer.goodchar.com
+    networks:
+      - gcnw
+
+  peer0.localngo1.goodchar.com:
+    container_name: peer0.localngo1.goodchar.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.localngo1.goodchar.com
+    networks:
+      - gcnw
+
+  peer1.localngo1.goodchar.com:
+    container_name: peer1.localngo1.goodchar.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.localngo1.goodchar.com
+    networks:
+      - gcnw
+
+  peer0.localngo2.goodchar.com:
+    container_name: peer0.localngo2.goodchar.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.localngo2.goodchar.com
+    networks:
+      - gcnw
+
+  peer1.localngo2.goodchar.com:
+    container_name: peer1.localngo2.goodchar.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.localngo2.goodchar.com
+    networks:
+      - gcnw
+  
+  peer0.gc.goodchar.com:
+    container_name: peer0.gc.goodchar.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.gc.goodchar.com
+    networks:
+      - gcnw
+
+  peer1.gc.goodchar.com:
+    container_name: peer1.gc.goodchar.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.gc.goodchar.com
+    networks:
+      - gcnw
+
+  ca.localngo1.goodchar.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-LocalNGO1
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.localngo1.goodchar.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/5b7bc0b07dba104ff44355e469da929ff9bfa560d71531bef422e5d594b7e6f7_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.localngo1.goodchar.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/5b7bc0b07dba104ff44355e469da929ff9bfa560d71531bef422e5d594b7e6f7_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/localngo1.goodchar.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca-peerLocalNGO1
+
+  ca.localngo2.goodchar.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-LocalNGO2
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.localngo2.goodchar.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/fed20ec45d0e8d7bfcefe5756b71bc3766a30865f0ee2801cee409450d7174d1_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.localngo2.goodchar.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/fed20ec45d0e8d7bfcefe5756b71bc3766a30865f0ee2801cee409450d7174d1_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/localngo2.goodchar.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca-peerLocalNGO2
+
+  ca.gc.goodchar.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-gc
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.gc.goodchar.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/67b4b12a9ef2c5d0f62fd8409c927405db1d3a015d7ae939b2eb6e564e575ca6_sk
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.gc.goodchar.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/67b4b12a9ef2c5d0f62fd8409c927405db1d3a015d7ae939b2eb6e564e575ca6_sk
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/gc.goodchar.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_gc
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      #- CORE_LOGGING_LEVEL=DEBUG
+      - CORE_LOGGING_LEVEL=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.localngo1.goodchar.com:7051
+      - CORE_PEER_LOCALMSPID=LocalNGO1MSP
+      - CORE_PEER_TLS_ENABLED=false
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/localngo1.goodchar.com/peers/peer0.localngo1.goodchar.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/localngo1.goodchar.com/peers/peer0.localngo1.goodchar.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/localngo1.goodchar.com/peers/peer0.localngo1.goodchar.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/localngo1.goodchar.com/users/Admin@localngo1.goodchar.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.goodchar.com
+      - peer0.localngo1.goodchar.com
+      - peer1.localngo1.goodchar.com
+      - peer0.localngo2.goodchar.com
+      - peer1.localngo2.goodchar.com
+      - peer0.gc.goodchar.com
+      - peer1.gc.goodchar.com
+      - ca.localngo1.goodchar.com
+      - ca.localngo2.goodchar.com
+      - ca.gc.goodchar.com
+    networks:
+      - gcnw

@@ -1,0 +1,8 @@
+NodeOUs:
+  Enable: true
+  ClientOUIdentifier:
+    Certificate: cacerts/ca.localngo1.goodchar.com-cert.pem
+    OrganizationalUnitIdentifier: client
+  PeerOUIdentifier:
+    Certificate: cacerts/ca.localngo1.goodchar.com-cert.pem
+    OrganizationalUnitIdentifier: peer
