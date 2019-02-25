@@ -51,7 +51,7 @@ function generateChannelArtifacts() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   set -x
-  configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+  bin/configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -63,7 +63,7 @@ function generateChannelArtifacts() {
   echo "### Generating channel configuration transaction 'channel.tx' ###"
   echo "#################################################################"
   set -x
-  configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+  bin/configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -76,7 +76,7 @@ function generateChannelArtifacts() {
   echo "#######    Generating anchor peer update for LocalNGO1MSP   ##########"
   echo "#################################################################"
   set -x
-  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/LocalNGO1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg LocalNGO1MSP
+  bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/LocalNGO1MSPanchors.tx -channelID $CHANNEL_NAME -asOrg LocalNGO1MSP
   res=$?
   set +x
   if [ $res -ne 0 ]; then
@@ -89,7 +89,7 @@ function generateChannelArtifacts() {
   echo "#######    Generating anchor peer update for LocalNGO2MSP   ##########"
   echo "#################################################################"
   set -x
-  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate \
+  bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate \
     ./channel-artifacts/LocalNGO2MSPanchors.tx -channelID $CHANNEL_NAME -asOrg LocalNGO2MSP
   res=$?
   set +x
@@ -103,7 +103,7 @@ function generateChannelArtifacts() {
   echo "#######    Generating anchor peer update for gcMSP   ##########"
   echo "#################################################################"
   set -x
-  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate \
+  bin/configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate \
     ./channel-artifacts/gcMSPanchors.tx -channelID $CHANNEL_NAME -asOrg gcMSP
   res=$?
   set +x
@@ -136,7 +136,6 @@ LANGUAGE=node
 IMAGETAG="1.3.0"
 
   generateCerts
-  replacePrivateKey
   generateChannelArtifacts
 
 
