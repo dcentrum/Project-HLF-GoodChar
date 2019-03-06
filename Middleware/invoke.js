@@ -13,17 +13,18 @@ var path = require('path');
 var util = require('util');
 var os = require('os');
 
+
 //
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
 var channel = fabric_client.newChannel('goodcharchannel');
 
-var localngo1peer = fabric_client.newPeer('grpc://localhost:7051', {'grpc.keepalive_timeout_ms': 60000});
+var localngo1peer = fabric_client.newPeer('grpc://localhost:7051', {'grpc.keepalive_timeout_ms': 100000});
 channel.addPeer(localngo1peer);
-var localngo2peer = fabric_client.newPeer('grpc://localhost:9051', {'grpc.keepalive_timeout_ms': 60000});
+var localngo2peer = fabric_client.newPeer('grpc://localhost:9051', {'grpc.keepalive_timeout_ms': 100000});
 channel.addPeer(localngo2peer);
-var gcpeer = fabric_client.newPeer('grpc://localhost:11051', {'grpc.keepalive_timeout_ms': 60000});
+var gcpeer = fabric_client.newPeer('grpc://localhost:11051', {'grpc.keepalive_timeout_ms': 100000});
 channel.addPeer(gcpeer);
 
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -66,7 +67,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		//targets: let default to the peer assigned to the client
 		chaincodeId: 'gccc',
 		fcn: 'QueryDonee',
-		args: ['Invoke', 'd1'],
+		args: ['d1'],
 		chainId: 'goodcharchannel',
 		txId: tx_id
 	};

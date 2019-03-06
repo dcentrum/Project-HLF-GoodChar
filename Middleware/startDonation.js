@@ -54,7 +54,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		//targets: let default to the peer assigned to the client
 		chaincodeId: 'gccc',
 		fcn: 'CreateTransaction',
-		args: ['c3', 'p3', 'v3', 'd3', 'a3', 'scan3'],
+		args: ['pradeep', 'Food & Blanlets distribution', 'CGI', 'mukesh', '2 blankets'],
 		chainId: 'goodcharchannel',
 		txId: tx_id
 	};
