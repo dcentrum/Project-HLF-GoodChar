@@ -11,7 +11,7 @@ Middleware folder contains the files which EnrollUsers, SetPermissions and sets 
 goodchar-mw conatins the API Router which routes the request to the required Backend blockchain network.
 
 Steps to Start the Goodchar Network
-1. Install HyperLedger Fabric 1.3 version by following the guidelines given in the following getting started link https://hyperledger-fabric.readthedocs.io/en/release-1.4/getting_started.html
+1. Install HyperLedger Fabric 1.3 version by following the guidelines given in the following getting started link https://hyperledger-fabric.readthedocs.io/en/release-1.3/getting_started.html
 2. Clone the GoodChar github project.
 3. Navigate to HLF folder and run the bash command "./start.sh" in the terminal
 4. Navigate to Middleware folder and run the below commands in the terminal
