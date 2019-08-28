@@ -12,9 +12,12 @@ goodchar-mw conatins the API Router which routes the request to the required Bac
 
 Steps to Start the Goodchar Network
 1. Install HyperLedger Fabric 1.3 version by following the guidelines given in the following getting started link https://hyperledger-fabric.readthedocs.io/en/release-1.3/getting_started.html
-2. Clone the GoodChar github project.
-3. Navigate to HLF folder and run the bash command "./start.sh" in the terminal
-4. Navigate to Middleware folder and run the below commands in the terminal
+2. Add fabric-samples\bin to PATH variable
+    sample command below, but varies based on user name and OS where fabric-samples is installed:
+    PATH=/Users/<UserName>/fabric-samples/bin:$PATH:.
+3. Clone the GoodChar Github project.
+4. Navigate to HLF folder and run the bash command "./start.sh" in the terminal
+5. Navigate to Middleware folder and run the below commands in the terminal
     1. npm install
     2. node enrolladmin.js
     3. node registeruser.js
